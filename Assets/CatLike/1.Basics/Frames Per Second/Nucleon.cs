@@ -1,0 +1,23 @@
+﻿using UnityEngine;
+
+namespace CatLike
+{
+    [RequireComponent(typeof(Rigidbody))]
+    public class Nucleon : MonoBehaviour
+    {
+        public float attractionForce;
+
+        private Rigidbody body;
+
+        private void Awake()
+        {
+            body = GetComponent<Rigidbody>();
+        }
+
+        private void FixedUpdate()
+        {
+            body.AddForce(transform.localPosition * -attractionForce);
+        }
+    }
+
+}
