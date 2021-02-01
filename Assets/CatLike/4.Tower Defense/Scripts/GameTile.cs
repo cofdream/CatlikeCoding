@@ -9,7 +9,10 @@ public class GameTile : MonoBehaviour
     int distance;
     public bool HasPath => distance != int.MaxValue;
 
-
+    static Quaternion northRotation = Quaternion.Euler(90f, 0f, 0f),
+                      eastRotation = Quaternion.Euler(90f, 90f, 0f),
+                      southRotation = Quaternion.Euler(90f, 180f, 0f),
+                      westRotation = Quaternion.Euler(90f, 270f, 0f);
     public void ClearPath()
     {
         distance = int.MaxValue;
@@ -20,16 +23,38 @@ public class GameTile : MonoBehaviour
         distance = 0;
         nextOnPath = null;
     }
-    private void GrowPathTo(GameTile neighbor)
+    private GameTile GrowPathTo(GameTile neighbor)
     {
-        Debug.Assert(HasPath, "NO path!");
-        if (nextOnPath == null || nextOnPath.HasPath)
+        if (!HasPath || neighbor == null || neighbor.HasPath)
         {
+            return null;
+        }
+        neighbor.distance = distance + 1;
+        neighbor.nextOnPath = this;
+
+        return neighbor;
+    }
+    public GameTile GrowPathNorth() => GrowPathTo(north);
+    public GameTile GrowPathEast() => GrowPathTo(east);
+    public GameTile GrowPathSouth() => GrowPathTo(south);
+    public GameTile GrowPathWest() => GrowPathTo(west);
+
+    public void ShowPath()
+    {
+        if (distance == 0)
+        {
+            arrow.gameObject.SetActive(false);
             return;
         }
-        neighbor.distance = distance++;
-        neighbor.nextOnPath = this;
+
+        arrow.gameObject.SetActive(true);
+        arrow.localRotation =
+            nextOnPath == north ? northRotation :
+            nextOnPath == east ? eastRotation :
+            nextOnPath == south ? southRotation :
+            westRotation;
     }
+
 
     public static void MakeEastWestNeighbors(GameTile east, GameTile west)
     {
@@ -43,4 +68,5 @@ public class GameTile : MonoBehaviour
         south.north = north;
         north.south = south;
     }
+
 }

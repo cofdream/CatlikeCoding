@@ -8,6 +8,8 @@ public class GameBoard : MonoBehaviour
     [SerializeField] GameTile tilePrefab;
     Vector2Int size;
     GameTile[] tileArray;
+
+    Queue<GameTile> searchFrontier = new Queue<GameTile>();
     public void Initialize(Vector2Int size)
     {
         this.size = size;
@@ -32,6 +34,35 @@ public class GameBoard : MonoBehaviour
                     GameTile.MakeNorthSouthNeighbors(tile, tileArray[i - size.x]);
                 }
             }
+        }
+        FindPaths();
+    }
+
+    private void FindPaths()
+    {
+        foreach (var gameTile in tileArray)
+        {
+            gameTile.ClearPath();
+        }
+
+        tileArray[tileArray.Length / 2].BecomeDestination();
+        searchFrontier.Enqueue(tileArray[tileArray.Length / 2]);
+
+        while (searchFrontier.Count > 0)
+        {
+            GameTile gameTile = searchFrontier.Dequeue();
+            if (gameTile != null)
+            {
+                searchFrontier.Enqueue(gameTile.GrowPathNorth());
+                searchFrontier.Enqueue(gameTile.GrowPathEast());
+                searchFrontier.Enqueue(gameTile.GrowPathSouth());
+                searchFrontier.Enqueue(gameTile.GrowPathWest());
+            }
+        }
+
+        foreach (var gameTile in tileArray)
+        {
+            gameTile.ShowPath();
         }
     }
 }
