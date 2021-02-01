@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.devilangel.datools": {
+      "version": "https://github.com/cofdream/DATools.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3e237a282dae1f7f02c9e7a4e8e8ade3c7a186c9"
+    },
     "com.unity.probuilder": {
       "version": "4.2.3",
       "depth": 0,
