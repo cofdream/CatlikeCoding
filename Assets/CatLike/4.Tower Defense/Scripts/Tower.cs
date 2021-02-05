@@ -1,49 +1,16 @@
 ﻿using UnityEngine;
 
-public class Tower : GameTileContent
+public abstract class Tower : GameTileContent
 {
     const int enemyLayerMask = 1 << 9;
 
     static Collider[] targetBuffer = new Collider[100];
 
-    [SerializeField, Range(1.5f, 10.5f)] float targetingRange = 1.5f;
-    TargetPoint target;
+    [SerializeField, Range(1.5f, 10.5f)] protected float targetingRange = 1.5f;
 
-    [SerializeField] Transform turret = default;
-    [SerializeField] Transform laserBeam = default;
-    [SerializeField, Range(1f, 100f)] float damage = 10f;
+    public abstract TowerType TowerType { get; }
 
-    Vector3 laserBeamScale;
-    private void Awake()
-    {
-        laserBeamScale = laserBeam.localScale;
-    }
-    public override void GameUpdate()
-    {
-        if (TrackTarget() || AcquireTarget())
-        {
-            Shoot();
-        }
-        else
-        {
-            laserBeam.localScale = Vector3.zero;
-        }
-        Debug.Log("Searching for target...");
-    }
-    private void Shoot()
-    {
-        Vector3 point = target.Position;
-        turret.LookAt(point);
-        laserBeam.localRotation = turret.localRotation;
-
-        float d = Vector3.Distance(turret.position, point);
-        laserBeamScale.z = d;
-        laserBeam.localScale = laserBeamScale;
-        laserBeam.localPosition = turret.localPosition + 0.5f * d * laserBeam.forward;
-
-        target.Enemy.ApplyDamage(damage * Time.deltaTime);
-    }
-    bool AcquireTarget()
+    protected bool AcquireTarget(out TargetPoint target)
     {
         Vector3 a = transform.localPosition;
         Vector3 b = a;
@@ -60,7 +27,7 @@ public class Tower : GameTileContent
         target = null;
         return false;
     }
-    bool TrackTarget()
+    protected bool TrackTarget(ref TargetPoint target)
     {
         if (target == null)
         {
@@ -85,9 +52,5 @@ public class Tower : GameTileContent
         Vector3 position = transform.localPosition;
         position.y += 0.01f;
         Gizmos.DrawWireSphere(position, targetingRange);
-        if (target != null)
-        {
-            Gizmos.DrawLine(position, target.Position);
-        }
     }
 }

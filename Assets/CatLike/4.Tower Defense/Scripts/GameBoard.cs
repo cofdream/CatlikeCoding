@@ -234,17 +234,27 @@ public class GameBoard : MonoBehaviour
             spawnPointList.Add(gameTile);
         }
     }
-    public void ToggleTower(GameTile gameTile)
+    public void ToggleTower(GameTile gameTile, TowerType towerType)
     {
         if (gameTile.GameTileContent.GameTileContentType == GameTileContentType.Tower)
         {
             updatingContent.Remove(gameTile.GameTileContent);
-            gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Empty);
-            FindPaths();
+
+            if (((Tower)gameTile.GameTileContent).TowerType == towerType)
+            {
+                gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+            else
+            {
+                gameTile.GameTileContent = gameTileContentFactory.Get(towerType);
+                updatingContent.Add(gameTile.GameTileContent);
+            }
+
         }
         else if (gameTile.GameTileContent.GameTileContentType == GameTileContentType.Empty)
         {
-            gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Tower);
+            gameTile.GameTileContent = gameTileContentFactory.Get(towerType);
 
             if (FindPaths())
             {
@@ -258,7 +268,7 @@ public class GameBoard : MonoBehaviour
         }
         else if (gameTile.GameTileContent.GameTileContentType == GameTileContentType.Wall)
         {
-            gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Tower);
+            gameTile.GameTileContent = gameTileContentFactory.Get(towerType);
             updatingContent.Add(gameTile.GameTileContent);
         }
     }
