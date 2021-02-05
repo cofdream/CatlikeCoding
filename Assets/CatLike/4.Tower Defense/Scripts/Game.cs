@@ -53,7 +53,6 @@ public class Game : MonoBehaviour
             board.ShowGrid = !board.ShowGrid;
         }
 
-        enemyCollection.GameUpdate();
 
         spawnProgress += spawnSpeed * Time.deltaTime;
         while (spawnProgress >= 1f)
@@ -62,13 +61,25 @@ public class Game : MonoBehaviour
 
             SpawnEnemy();
         }
+
+
+        enemyCollection.GameUpdate();
+        Physics.SyncTransforms();
+        board.GameUpdate();
     }
     private void HandleTouch()
     {
         GameTile gameTile = board.GetTile(TouchRay);
         if (gameTile != null)
         {
-            board.ToggleWall(gameTile);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                board.ToggleTower(gameTile);
+            }
+            else
+            {
+                board.ToggleWall(gameTile);
+            }
         }
     }
     private void HandleAlternativeTouch()

@@ -14,7 +14,7 @@ public class GameBoard : MonoBehaviour
     Queue<GameTile> searchFrontier = new Queue<GameTile>();
 
     List<GameTile> spawnPointList = new List<GameTile>();
-
+    List<GameTileContent> updatingContent = new List<GameTileContent>();
     public int SpawPointCount => spawnPointList.Count;
 
     private bool showGrid, showPaths;
@@ -162,7 +162,7 @@ public class GameBoard : MonoBehaviour
 
     public GameTile GetTile(Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, 1))
         {
             // hit.point 的（0，0）在屏幕中间，所以做一个偏移。
             int x = (int)(hit.point.x + size.x * 0.5f);
@@ -174,6 +174,13 @@ public class GameBoard : MonoBehaviour
             }
         }
         return null;
+    }
+    public void GameUpdate()
+    {
+        for (int i = 0; i < updatingContent.Count; i++)
+        {
+            updatingContent[i].GameUpdate();
+        }
     }
 
     public GameTile GetSpawnPoint(int index)
@@ -225,6 +232,34 @@ public class GameBoard : MonoBehaviour
         {
             gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.SpawnPoint);
             spawnPointList.Add(gameTile);
+        }
+    }
+    public void ToggleTower(GameTile gameTile)
+    {
+        if (gameTile.GameTileContent.GameTileContentType == GameTileContentType.Tower)
+        {
+            updatingContent.Remove(gameTile.GameTileContent);
+            gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Empty);
+            FindPaths();
+        }
+        else if (gameTile.GameTileContent.GameTileContentType == GameTileContentType.Empty)
+        {
+            gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Tower);
+
+            if (FindPaths())
+            {
+                updatingContent.Add(gameTile.GameTileContent);
+            }
+            else
+            {
+                gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+        else if (gameTile.GameTileContent.GameTileContentType == GameTileContentType.Wall)
+        {
+            gameTile.GameTileContent = gameTileContentFactory.Get(GameTileContentType.Tower);
+            updatingContent.Add(gameTile.GameTileContent);
         }
     }
 

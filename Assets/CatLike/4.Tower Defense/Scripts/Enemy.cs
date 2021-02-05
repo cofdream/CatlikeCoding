@@ -29,11 +29,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public float Scale { get; private set; }
+
+    public float Health { get; set; }
+
     public void Initialize(float scale, float speed, float pathOffest)
     {
+        Scale = scale;
         model.localScale = new Vector3(scale, scale, scale);
         this.speed = speed;
         this.pathOffest = pathOffest;
+
+        Health = 100f * scale;
     }
 
     public bool GameUpdate()
@@ -62,6 +69,12 @@ public class Enemy : MonoBehaviour
         {
             float angle = Mathf.LerpUnclamped(directionAngelFrom, directionAngelTo, progress);
             transform.localRotation = Quaternion.Euler(0f, angle, 0f);
+        }
+
+        if (Health <= 0f)
+        {
+            OriginFactory.Reclaim(this);
+            return false;
         }
 
         return true;
@@ -131,14 +144,14 @@ public class Enemy : MonoBehaviour
         directionAngelTo = directionAngelFrom + 90f;
         model.localPosition = new Vector3(pathOffest - 0.5f, 0f);
         transform.localPosition = positionFrom + direction.GetHalfVector();
-        progressFactor = speed / (Mathf.PI * 0.25f * (0.5f - pathOffest));
+        progressFactor = speed / (Mathf.PI * 0.5f * (0.5f - pathOffest));
     }
     private void PrepareTurnLeft()
     {
         directionAngelTo = directionAngelFrom - 90f;
         model.localPosition = new Vector3(pathOffest + 0.5f, 0f);
         transform.localPosition = positionFrom + direction.GetHalfVector();
-        progressFactor = speed / (Mathf.PI * 0.25f * (0.5f + pathOffest));
+        progressFactor = speed / (Mathf.PI * 0.5f * (0.5f + pathOffest));
     }
     private void PrepareTurnAround()
     {
@@ -156,5 +169,11 @@ public class Enemy : MonoBehaviour
         model.localPosition = new Vector3(pathOffest, 0f);
         transform.localRotation = direction.GetRotation();
         progressFactor = 2f * speed;
+    }
+
+    public void ApplyDamage(float damage)
+    {
+        Debug.Assert(damage >= 0f, "Negative damage applied.");
+        Health -= damage;
     }
 }

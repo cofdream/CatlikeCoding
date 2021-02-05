@@ -6,4 +6,5 @@ public enum GameTileContentType
     Destination,
     Wall,
     SpawnPoint,
+    Tower,
 }
