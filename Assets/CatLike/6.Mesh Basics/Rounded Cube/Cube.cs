@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CatLike
 {
@@ -122,13 +121,13 @@ namespace CatLike
 
 
             return;
-            int rang = (xSize + zSize) * 2;
+            //int rang = (xSize + zSize) * 2;
 
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(vertices[rang * (ySize + 1) - 1], 0.1f);
+            //Gizmos.color = Color.cyan;
+            //Gizmos.DrawSphere(vertices[rang * (ySize + 1) - 1], 0.1f);
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(vertices[rang * ySize], 0.1f);
+            //Gizmos.color = Color.red;
+            //Gizmos.DrawSphere(vertices[rang * ySize], 0.1f);
         }
 
 

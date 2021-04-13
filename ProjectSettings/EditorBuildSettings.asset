@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/CatLike/3.Object Management/Persisting Objects/Scenes/Level 1.unity
+    guid: 39691f15adfec9c499fd0e7406525359
+  - enabled: 1
+    path: Assets/CatLike/3.Object Management/Persisting Objects/Scenes/Level 2.unity
+    guid: cb94c0e8dbb33784bb24135f379bf6a9
+  - enabled: 1
+    path: Assets/CatLike/3.Object Management/Persisting Objects/Scenes/Level 3.unity
+    guid: fa49eb32e6e39614e8518ff7d26a876f
+  - enabled: 1
+    path: Assets/CatLike/3.Object Management/Persisting Objects/Scenes/Main Scene.unity
+    guid: 7defc9a2463b14743b93f7f09a415a86
   m_configObjects: {}

@@ -1,0 +1,17 @@
+{
+    "name": "Hex.Map.Editor",
+    "references": [
+        "GUID:11cd68409d33fec41a0c1fcda62fb359"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
