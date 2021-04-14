@@ -11,6 +11,7 @@ namespace CatLike.HexMap
         public HexGrid HexGrid;
 
         private Color activeColor;
+        private int activeElevation;
 
         private void Awake()
         {
@@ -29,12 +30,22 @@ namespace CatLike.HexMap
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(inputRay, out RaycastHit hit))
             {
-                HexGrid.ColorCell(hit.point, activeColor);
+                EditCell(HexGrid.GetCell(hit.point));
             }
         }
         public void SelectColor(int index)
         {
             activeColor = ColorArray[index];
+        }
+        public void SetElevation(float elevation)
+        {
+            activeElevation = (int)elevation;
+        }
+        private void EditCell(HexCell cell)
+        {
+            cell.Color = activeColor;
+            cell.Elevation = activeElevation;
+            HexGrid.Refresh();
         }
     }
 }

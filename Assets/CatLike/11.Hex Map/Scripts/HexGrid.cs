@@ -41,13 +41,17 @@ namespace CatLike.HexMap
             hexMesh.Triangulate(cells);
         }
 
-        public void ColorCell(Vector3 position, Color color)
+        public HexCell GetCell(Vector3 position)
         {
             position = transform.InverseTransformPoint(position);
             HexCoordinates hexCoordinates = HexCoordinates.FromPostion(position);
             int index = hexCoordinates.X + hexCoordinates.Z * Width + hexCoordinates.Z / 2;
-            HexCell cell = cells[index];
-            cell.Color = color;
+
+            return cells[index];
+        }
+
+        public void Refresh()
+        {
             hexMesh.Triangulate(cells);
         }
 
@@ -91,6 +95,7 @@ namespace CatLike.HexMap
             label.rectTransform.SetParent(gridCanvas.transform, false);
             label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
             label.text = cell.coordinates.ToStringOnSeparateLine();
+            cell.uiRect = label.rectTransform;
         }
     }
 }
